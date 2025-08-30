@@ -1,0 +1,36 @@
+====================================
+   MedianFinder using Two Heaps
+====================================
+
+Data Structures:
+----------------
+1. Max Heap (left side) → keeps the smaller half of numbers.
+2. Min Heap (right side) → keeps the larger half of numbers.
+
+Invariants (must always hold):
+------------------------------
+1. Order property:
+   Every element in Max Heap ≤ every element in Min Heap.
+
+2. Size property:
+   - Max Heap can have the same size as Min Heap, OR
+   - Max Heap can have exactly 1 more element than Min Heap.
+
+   This ensures that the median can always be found in O(1).
+
+Algorithm:
+----------
+1. addNum(num):
+   a) Insert num into Max Heap (left side).
+      - Temporary step to push value into "smaller half".
+   b) Move the largest element from Max Heap into Min Heap.
+      - Ensures order property (all left ≤ all right).
+   c) Balance sizes:
+      - If Min Heap has more elements than Max Heap,
+        move the smallest element from Min Heap back into Max Heap.
+
+2. findMedian():
+   a) If Max Heap has more elements:
+        median = top(Max Heap)
+   b) If both heaps have the same size:
+        median = (top(Max Heap) + top(Min Heap)) / 2.0
