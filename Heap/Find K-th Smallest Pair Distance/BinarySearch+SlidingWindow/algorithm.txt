@@ -1,0 +1,60 @@
+=========================================================
+   Algorithm: K-th Smallest Pair Distance (Optimized)
+   Approach: Binary Search + Sliding Window
+=========================================================
+
+1. Sort the array
+   - Sorting helps to easily count pair distances.
+   - Example: nums = [1,3,1] → [1,1,3]
+
+---------------------------------------------------------
+2. Binary Search on Distance
+   - Minimum possible distance = 0
+   - Maximum possible distance = max(nums) - min(nums)
+
+   While low < high:
+      mid = (low + high) / 2
+      count = number of pairs with distance <= mid
+
+      If count >= k:
+          high = mid   # answer is in [low, mid]
+      Else:
+          low = mid + 1  # answer is in [mid+1, high]
+
+---------------------------------------------------------
+3. Count Pairs with Sliding Window
+   Function countPairs(nums, guess):
+       count = 0
+       left = 0
+
+       For right from 0 to n-1:
+           While nums[right] - nums[left] > guess:
+               left++    # shrink window
+           count += (right - left)
+
+       return count
+
+   - This counts how many pairs (i, j) have nums[j] - nums[i] <= guess
+   - Complexity: O(n)
+
+---------------------------------------------------------
+4. Example
+   nums = [1, 3, 1], k = 1
+   Sorted = [1, 1, 3]
+   Distances = [0, 2, 2]
+
+   Binary search steps:
+     low = 0, high = 2
+     mid = 1 → countPairs = 1 (>= k) → high = 1
+     mid = 0 → countPairs = 1 (>= k) → high = 0
+     stop → answer = 0
+
+   Result = 0
+
+---------------------------------------------------------
+5. Complexity
+   - Sorting: O(n log n)
+   - Binary search steps: O(log W), W = max distance
+   - Each countPairs: O(n)
+   - Total: O(n log W), efficient for n up to 1e5
+   - Space: O(1)
