@@ -1,0 +1,65 @@
+====================================================
+ ALGORITHM: Sliding Window Median (Two Heaps)
+====================================================
+
+Input:
+  nums[] : array of integers
+  k      : size of sliding window
+
+Output:
+  medians[] : array of medians for each window
+
+----------------------------------------------------
+STEP 1: Initialize
+----------------------------------------------------
+- maxHeap : a max-heap (stores the smaller half of numbers)
+- minHeap : a min-heap (stores the larger half of numbers)
+
+Properties:
+- maxHeap contains the smaller half
+- minHeap contains the larger half
+- Difference in sizes between heaps ≤ 1
+
+----------------------------------------------------
+STEP 2: Process numbers one by one
+----------------------------------------------------
+For i from 0 to nums.length-1:
+  -> Add nums[i] into one of the heaps using add(num):
+       - If maxHeap is empty OR num ≤ maxHeap.top:
+            push num into maxHeap
+         else:
+            push num into minHeap
+       - Call rebalanceHeaps() to ensure size condition
+
+  -> If current window size ≥ k:
+       - Compute median using findMedian()
+       - Store median into result array
+       - Remove the element going out of window
+         (nums[i - k + 1]) using remove(num):
+            * If num > maxHeap.top → remove from minHeap
+            * Else remove from maxHeap
+         - Call rebalanceHeaps()
+
+----------------------------------------------------
+STEP 3: Finding median
+----------------------------------------------------
+findMedian():
+  - If maxHeap has more elements:
+       return maxHeap.top
+  - Else (heaps equal size):
+       return (maxHeap.top + minHeap.top) / 2.0
+
+----------------------------------------------------
+STEP 4: Rebalancing heaps
+----------------------------------------------------
+rebalanceHeaps():
+  - If maxHeap.size() > minHeap.size() + 1:
+       move top(maxHeap) → minHeap
+  - If maxHeap.size() < minHeap.size():
+       move top(minHeap) → maxHeap
+  - Else: do nothing
+
+----------------------------------------------------
+FINAL STEP:
+Return the array of medians
+====================================================

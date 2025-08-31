@@ -1,0 +1,69 @@
+====================================================
+ ALGORITHM: Sliding Window Median (Two Heaps + Lazy Deletion)
+====================================================
+
+Input:
+  nums[] : array of integers
+  k      : size of sliding window
+
+Output:
+  medians[] : array of medians for each sliding window
+
+----------------------------------------------------
+STEP 1: Initialize
+----------------------------------------------------
+- small (max-heap)  -> holds the smaller half of numbers
+- large (min-heap)  -> holds the larger half of numbers
+- delayed (hash map) -> stores counts of elements to remove later
+- smallSize, largeSize -> track valid sizes (ignoring delayed deletions)
+
+----------------------------------------------------
+STEP 2: Build the first window of size k
+----------------------------------------------------
+For each num in nums[0..k-1]:
+  -> Insert num into the correct heap
+  -> Rebalance heaps
+First median = getMedian()
+
+----------------------------------------------------
+STEP 3: Slide the window
+----------------------------------------------------
+For i = k to nums.length-1:
+  outNum = nums[i - k]   (element leaving window)
+  inNum  = nums[i]       (element entering window)
+
+  -> Erase(outNum)
+     * Mark outNum in delayed map
+     * Adjust smallSize/largeSize
+     * If outNum == heap.top, prune immediately
+
+  -> Insert(inNum)
+     * Push into small if <= small.top, else into large
+     * Update smallSize/largeSize
+     * Rebalance heaps
+
+  -> Prune(heap)
+     * While heap.top is marked in delayed:
+         pop it
+         decrease delayed count
+         remove entry if count=0
+
+  -> Median = getMedian()
+     * If k is odd: median = small.top
+     * If k is even: median = (small.top + large.top) / 2
+
+----------------------------------------------------
+STEP 4: Repeat until end of array
+----------------------------------------------------
+Return all collected medians
+
+====================================================
+ TIME COMPLEXITY:
+   - Insert: O(log k)
+   - Erase:  O(log k) (lazy)
+   - Median: O(1)
+   - Overall: O(n log k)
+
+ SPACE COMPLEXITY:
+   O(k) for heaps + map
+====================================================
