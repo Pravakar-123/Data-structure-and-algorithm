@@ -1,0 +1,65 @@
+==================================================
+Algorithm: K Smallest Pairs (Brute Force + Sorting)
+==================================================
+
+Input:
+  nums1 = [a1, a2, ...], nums2 = [b1, b2, ...], k
+
+Goal:
+  Return k pairs (x,y) with the smallest sums x+y.
+
+--------------------------------------------------
+Steps:
+1. Initialize empty list `pairs`
+
+2. Generate all possible pairs:
+     For each i in nums1:
+       For each j in nums2:
+          Add (nums1[i], nums2[j]) to pairs
+
+3. Sort pairs by sum:
+     Comparator = (a[0] + a[1]) - (b[0] + b[1])
+
+4. Initialize result = []
+   Take first min(k, pairs.size()) elements
+   Add them to result
+
+5. Return result
+
+--------------------------------------------------
+Example:
+nums1 = [1,7,11], nums2 = [2,4,6], k=3
+
+Step 1: Generate pairs
+   [1,2], [1,4], [1,6],
+   [7,2], [7,4], [7,6],
+   [11,2], [11,4], [11,6]
+
+Step 2: Sort by sum
+   [1,2] (sum=3)
+   [1,4] (sum=5)
+   [1,6] (sum=7)
+   [7,2] (sum=9)
+   [7,4] (sum=11)
+   [11,2] (sum=13)
+   [7,6] (sum=13)
+   [11,4] (sum=15)
+   [11,6] (sum=17)
+
+Step 3: Take first k=3
+   Result = [[1,2],[1,4],[1,6]]
+
+--------------------------------------------------
+Complexity Analysis:
+
+Let n = nums1.length
+    m = nums2.length
+
+- Generate all pairs: O(n * m)
+- Sorting pairs: O(n*m log(n*m))
+- Picking first k: O(k)
+
+Total Time = O(n*m log(n*m))
+Space = O(n*m) to store all pairs
+
+--------------------------------------------------

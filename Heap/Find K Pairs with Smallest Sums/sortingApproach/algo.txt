@@ -1,0 +1,144 @@
+approach 1 heap(Brute force)
+==================================================
+Algorithm: K Smallest Pairs (Brute Force with Min-Heap)
+==================================================
+
+Input:
+  nums1 = [a1, a2, ...], nums2 = [b1, b2, ...], k
+
+Goal:
+  Return k pairs (x,y) with the smallest sums x+y.
+
+--------------------------------------------------
+Steps:
+1. Create a min-heap to store pairs:
+     Each element = (sum, i, j)
+     where sum = nums1[i] + nums2[j]
+
+2. Generate all possible pairs:
+     For each i in nums1:
+       For each j in nums2:
+          sum = nums1[i] + nums2[j]
+          Push (sum, i, j) into heap
+
+3. Initialize result list = []
+
+4. Repeat k times (or until heap empty):
+     - Pop smallest element from heap
+     - Extract (i, j)
+     - Add [nums1[i], nums2[j]] to result
+
+5. Return result
+
+--------------------------------------------------
+Example:
+nums1 = [1,7,11]
+nums2 = [2,4,6]
+k = 3
+
+Step 1: Generate all pairs
+  (1+2=3), (1+4=5), (1+6=7),
+  (7+2=9), (7+4=11), (7+6=13),
+  (11+2=13), (11+4=15), (11+6=17)
+
+Heap = [ (3,[1,2]), (5,[1,4]), (7,[1,6]), (9,[7,2]), ... ]
+
+Step 2: Pop k=3 times
+  Pop (3,[1,2]) → result=[ [1,2] ]
+  Pop (5,[1,4]) → result=[ [1,2],[1,4] ]
+  Pop (7,[1,6]) → result=[ [1,2],[1,4],[1,6] ]
+
+Answer: [[1,2],[1,4],[1,6]]
+
+--------------------------------------------------
+Complexity Analysis:
+
+Let n = nums1.length
+    m = nums2.length
+
+- Generating all pairs = O(n * m)
+- Inserting each into heap = O(log(n*m)) per insert
+  → Total heap build = O(n*m log(n*m))
+
+- Extracting k pairs = O(k log(n*m))
+
+Final:
+  Time Complexity  = O(n*m log(n*m))
+  Space Complexity = O(n*m)
+
+⚠️ This brute force approach is very slow if n and m are large,
+since heap can hold n*m elements.
+--------------------------------------------------
+
+
+Approach 2 heap(Optimized)
+==================================================
+Algorithm: K Smallest Pairs (Optimized Min-Heap)
+==================================================
+
+Input:
+  nums1 = [a1, a2, ...], nums2 = [b1, b2, ...], k
+
+Goal:
+  Return k pairs (x,y) with the smallest sums x+y.
+
+--------------------------------------------------
+Steps:
+1. Create a min-heap to store candidate pairs:
+     Each element = (sum, i, j)
+     where sum = nums1[i] + nums2[j]
+     i = index in nums1
+     j = index in nums2
+
+2. Initialize heap:
+     For i = 0 to min(k-1, nums1.length-1):
+         Push (nums1[i] + nums2[0], i, 0)
+     (We pair first k elements of nums1 with nums2[0])
+
+3. Initialize result = []
+
+4. Repeat while k > 0 and heap not empty:
+     - Pop smallest element from heap → (sum, i, j)
+     - Add [nums1[i], nums2[j]] to result
+     - If j+1 < nums2.length:
+         Push (nums1[i] + nums2[j+1], i, j+1) into heap
+       (This advances in nums2 for same nums1[i])
+
+5. Return result
+
+--------------------------------------------------
+Example:
+nums1 = [1,7,11], nums2 = [2,4,6], k = 3
+
+Step 1: Initialize heap
+  Push (1+2=3, i=0,j=0)
+  Push (7+2=9, i=1,j=0)
+  Push (11+2=13, i=2,j=0)
+
+Heap = [ (3,[1,2]), (9,[7,2]), (13,[11,2]) ]
+
+Step 2: Extract 3 times
+  Pop (3,[1,2]) → result=[ [1,2] ]
+       Push (1+4=5, i=0,j=1)
+  Pop (5,[1,4]) → result=[ [1,2],[1,4] ]
+       Push (1+6=7, i=0,j=2)
+  Pop (7,[1,6]) → result=[ [1,2],[1,4],[1,6] ]
+
+Answer: [[1,2],[1,4],[1,6]]
+
+--------------------------------------------------
+Complexity Analysis:
+
+Let n = nums1.length
+    m = nums2.length
+
+- Heap size ≤ min(k, n)
+- Initial heap build = O(min(k, n))
+- Each pop/push operation = O(log min(k, n))
+- We perform up to k iterations
+
+Total Time = O(k log(min(k, n)))
+Space = O(min(k, n)) for heap + O(k) for result
+
+--------------------------------------------------
+
