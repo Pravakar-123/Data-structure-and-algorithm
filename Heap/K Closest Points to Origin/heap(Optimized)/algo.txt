@@ -1,0 +1,51 @@
+==================================================
+Algorithm 1: K Closest Points to Origin (Heap)
+==================================================
+
+Input:
+  points[][] -> array of points [xi, yi]
+  k          -> number of closest points to return
+
+Steps:
+1. Define a function distance(point):
+       return point[0]^2 + point[1]^2   // squared Euclidean distance
+
+2. Create a max-heap (priority queue) that orders points by distance in descending order.
+
+3. For each point in points:
+       a. Push the point into the heap.
+       b. If heap size > k:
+              remove the top element (the farthest point).
+
+4. After processing all points, the heap contains k closest points.
+
+5. Extract all points from the heap into result[][].
+
+Output:
+  result[][] containing k closest points to origin
+
+Complexity:
+  Time  -> O(n log k)
+  Space -> O(k)
+
+
+Example Walkthrough:
+--------------------
+Input: points = [[3,3],[5,-1],[-2,4]], k = 2
+
+Distances:
+   [3,3]   -> 18
+   [5,-1]  -> 26
+   [-2,4]  -> 20
+
+Heap process:
+   Insert [3,3] -> heap = [[3,3]]
+   Insert [5,-1] -> heap = [[5,-1],[3,3]]
+   Insert [-2,4] -> heap = [[5,-1],[3,3],[-2,4]]
+
+   Heap size > 2 -> remove farthest ([5,-1])
+
+Final Heap -> [[-2,4],[3,3]]
+Output -> [[-2,4],[3,3]]
+
+

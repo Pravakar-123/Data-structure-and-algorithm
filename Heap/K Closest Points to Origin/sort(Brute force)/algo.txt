@@ -1,0 +1,44 @@
+==================================================
+Algorithm: K Closest Points to Origin (Sorting)
+==================================================
+
+Input:
+  points[][] -> array of points [xi, yi]
+  k          -> number of closest points to return
+
+Steps:
+1. Define a function distance(point):
+       return point[0]^2 + point[1]^2   // squared Euclidean distance
+
+2. Sort the array points[][] in ascending order 
+   based on the distance(point).
+
+3. Take the first k elements from the sorted array.
+
+4. Return these k points as result.
+
+Output:
+  result[][] containing k closest points to origin
+
+
+Example Walkthrough:
+--------------------
+Input: points = [[3,3],[5,-1],[-2,4]], k = 2
+
+Step 1: Compute distances
+   [3,3]   -> 18
+   [5,-1]  -> 26
+   [-2,4]  -> 20
+
+Step 2: Sort by distance
+   Sorted points = [[3,3],[ -2,4],[5,-1]]
+
+Step 3: Take first k = 2 points
+   Result = [[3,3],[-2,4]]
+
+Output:
+   [[3,3],[-2,4]]
+
+Complexity:
+  Time  -> O(n log n) (due to sorting)
+  Space -> O(1) extra (ignoring output array)
