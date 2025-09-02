@@ -1,0 +1,72 @@
+
+If coordinates were very large (e.g., up to 10^9, not bounded by 1000), 
+then the heap / event sorting solution (O(N log N)) is necessary.
+
+==================================================
+Algorithm: Car Pooling using Min-Heap
+==================================================
+
+Input:
+  trips[i] = [numPassengers, from, to]
+  capacity -> maximum car capacity
+
+Goal:
+  Check if car never exceeds capacity.
+
+--------------------------------------------------
+Steps:
+1. Sort trips by `from` (start location).
+
+2. Create a min-heap ordered by `to` (end location).
+   This heap keeps track of trips currently active.
+
+3. Initialize currentPassengers = 0.
+
+4. Iterate over each trip in sorted order:
+   a. While heap is not empty AND heap.peek().end <= trip.start:
+        - remove trip from heap
+        - subtract its passengers from currentPassengers
+
+   b. Add current trip's passengers to currentPassengers.
+   c. Push current trip into heap.
+   d. If currentPassengers > capacity:
+        return false
+
+5. After loop ends, return true.
+
+--------------------------------------------------
+Example:
+Trips = [[2,1,5],[3,3,7],[4,6,8]], capacity = 6
+
+Sorted trips = [[2,1,5],[3,3,7],[4,6,8]]
+
+Step 1: Trip [2,1,5]
+   currentPassengers = 2
+   heap = [ (end=5, passengers=2) ]
+
+Step 2: Trip [3,3,7]
+   heap top = 5 > 3, nothing removed
+   currentPassengers = 2 + 3 = 5
+   heap = [ (5,2), (7,3) ]
+
+Step 3: Trip [4,6,8]
+   heap top = 5 > 4, nothing removed
+   currentPassengers = 5 + 4 = 9
+   9 > 6 → return false
+
+Answer: false
+
+--------------------------------------------------
+Complexity Analysis:
+- Sorting trips: O(N log N)
+- Iterating trips: O(N)
+- Heap operations (insert/remove): O(log N) each
+  Total = O(N log N)
+
+- Space:
+  Heap may hold up to N trips in worst case → O(N)
+  Sorting in-place if allowed, else O(N) for copy
+
+Final:
+  Time Complexity  = O(N log N)
+  Space Complexity = O(N)
