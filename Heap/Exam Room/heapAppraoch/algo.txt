@@ -1,0 +1,72 @@
+Algorithm: ExamRoom (Heap + Interval)
+
+Input: N (number of seats)
+Operations: seat(), leave(p)
+
+----------------------------------------------------
+Initialization:
+1. Store all empty seats as intervals [start, end].
+2. Use a max-heap (priority queue) ordered by:
+     - Larger distance first
+     - If tie → smaller start index wins
+3. Maps (startMap, endMap) to track current intervals.
+
+----------------------------------------------------
+Function: getDistance(interval [start, end])
+   if start == 0 OR end == N-1:
+       distance = end - start   // edge interval
+   else:
+       distance = (end - start) / 2
+   return distance
+
+----------------------------------------------------
+Function: seat()
+1. While heap not empty:
+   a. Pop interval [start, end] from heap
+   b. If this interval is stale (not in maps):
+         continue  // skip it
+   c. Choose seat:
+         if start == 0:
+             seat = 0
+         else if end == N-1:
+             seat = N-1
+         else:
+             seat = start + (end - start) / 2
+   d. Remove [start, end] from maps
+   e. Add new intervals:
+         if seat > start:
+             add [start, seat-1]
+         if seat < end:
+             add [seat+1, end]
+   f. Return seat
+
+----------------------------------------------------
+Function: leave(p)
+1. start = p, end = p
+2. If interval ends at (p-1) exists:
+       merge left interval → start = left.start
+       remove left interval
+3. If interval starts at (p+1) exists:
+       merge right interval → end = right.end
+       remove right interval
+4. Add new merged interval [start, end]
+
+----------------------------------------------------
+Complexity:
+- seat():  O(log N) due to heap operations
+- leave(): O(log N) due to map/heap updates
+- Space:   O(N) for intervals + maps
+
+----------------------------------------------------
+Example Trace (N = 10)
+Ops: ["ExamRoom","seat","seat","seat","seat","leave","leave","seat"]
+
+Heap = [ [0,9] ]
+
+seat()  -> seat = 0, push [1,9]
+seat()  -> seat = 9, push [1,8]
+seat()  -> seat = 4, push [1,3],[5,8]
+seat()  -> seat = 2, push [1,1],[3,3]
+leave(4)-> merge [3,3] + [5,8] => [3,8]
+leave(9)-> merge [3,8] + (right edge) => [3,9]
+seat()  -> seat = 6

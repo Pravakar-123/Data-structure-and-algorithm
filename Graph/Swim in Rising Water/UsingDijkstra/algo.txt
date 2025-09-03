@@ -1,0 +1,29 @@
+Algorithm: Swim in Rising Water (Dijkstra)
+
+Input: grid[n][n]
+Output: Minimum time to reach bottom-right cell
+
+Steps:
+
+1. Initialize:
+   - n = grid size
+   - directions = [(1,0), (-1,0), (0,1), (0,-1)]
+   - visited[n][n] = false
+   - priority queue (min-heap) = store (time, row, col)
+   - push (grid[0][0], 0, 0) into heap
+   - mark visited[0][0] = true
+
+2. While heap is not empty:
+   a. Pop (time, r, c) from heap
+      -> this is the current "earliest reachable" cell
+   b. If (r, c) == (n-1, n-1):
+        return time   // reached destination
+   c. For each neighbor (nr, nc) of (r, c):
+        - If inside bounds AND not visited:
+            * newTime = max(time, grid[nr][nc])
+            * push (newTime, nr, nc) into heap
+            * mark visited[nr][nc] = true
+
+3. End While
+
+4. Return -1   // (should never happen, since destination is always reachable)
