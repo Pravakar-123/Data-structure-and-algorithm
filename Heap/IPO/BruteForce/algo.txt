@@ -1,0 +1,29 @@
+Algorithm: Brute Force IPO
+
+Input:
+    k = maximum number of projects
+    w = initial capital
+    profits[] = project profits
+    capital[] = required capitals
+
+Steps:
+1. Create a visited[] array initialized to false.
+2. While k > 0:
+      a) Set index = -1, maxProfit = -∞.
+      b) Loop over all projects:
+            - If project not visited AND capital[i] <= w AND profit[i] > maxProfit:
+                  * Update index = i
+                  * Update maxProfit = profits[i]
+      c) If index == -1:
+            - Return w (no feasible project available).
+      d) Mark visited[index] = true.
+      e) Increase w = w + profits[index].
+      f) Decrement k.
+3. Return w.
+
+Time Complexity:
+    - For each of k projects, scan all n projects → O(n*k).
+    - Too slow for n=10^5, k=10^5 (will TLE).
+
+Space Complexity:
+    - O(n) for visited[].

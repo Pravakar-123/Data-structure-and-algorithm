@@ -1,0 +1,61 @@
+Algorithm: IPO with Two Heaps and Push Back
+
+Input: 
+    k = max number of projects
+    w = initial capital
+    profits[] = array of project profits
+    capital[] = array of required capitals
+
+Steps:
+1. Create a minHeap (priority queue) sorted by capital.
+      If two projects have same capital, higher profit comes first.
+2. Create a maxHeap sorted by profit.
+3. Push all (capital, profit) into minHeap.
+4. Repeat until k == 0:
+      a) While minHeap not empty and top.capital <= w:
+             - Move project from minHeap -> maxHeap
+      b) If maxHeap is empty:
+             - return w   (no feasible project)
+      c) Pick best project from maxHeap (largest profit).
+      d) Increase w = w + profit of chosen project.
+      e) k = k - 1
+      f) Push all *remaining* projects in maxHeap back into minHeap.
+5. Return w.
+
+Time Complexity:
+    - Each round moves all elements between heaps → O(n² log n) worst case
+    - Too slow for n = 10^5, causes TLE.
+
+Space Complexity:
+    - O(n) for two heaps.
+
+
+Algorithm: IPO with MinHeap + MaxHeap (Efficient)
+
+Input:
+    k = max number of projects
+    w = initial capital
+    profits[] = array of project profits
+    capital[] = array of required capitals
+
+Steps:
+1. Create a minHeap sorted by capital (store index of project).
+2. Create a maxHeap sorted by profit (store index of project).
+3. Push all project indices into minHeap.
+4. Repeat while k > 0:
+      a) While minHeap not empty and capital[minHeap.top] <= w:
+             - Move project index from minHeap -> maxHeap
+      b) If maxHeap is empty:
+             - return w   (no feasible project)
+      c) Pick best project from maxHeap (largest profit).
+      d) Increase w = w + profits[chosen project].
+      e) k = k - 1
+5. Return w.
+
+Time Complexity:
+    - Each project moves once from minHeap → maxHeap → O(n log n)
+    - At most k extractions from maxHeap → O(k log n)
+    - Total = O((n + k) log n)
+
+Space Complexity:
+    - O(n) for two heaps.
