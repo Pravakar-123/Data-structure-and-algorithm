@@ -1,0 +1,11 @@
+====================================================
+APPROACH 2: HEAP (PriorityQueue)
+====================================================
+Algorithm:
+1. Count frequencies of all numbers.
+2. Insert all frequencies into a max-heap.
+3. Keep polling largest frequency and add to removed count.
+4. Stop when removed >= n/2, count number of pops as answer.
+
+TC: O(n log m)   [heapify + polling]
+SC: O(m)         [frequency map + heap]

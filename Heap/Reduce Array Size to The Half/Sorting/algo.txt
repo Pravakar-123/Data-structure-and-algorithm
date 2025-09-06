@@ -1,0 +1,12 @@
+====================================================
+APPROACH 3: SORTING
+====================================================
+Algorithm:
+1. Count frequencies of all numbers.
+2. Store them in a list.
+3. Sort list in descending order.
+4. Pick frequencies greedily until removed >= n/2.
+
+
+TC: O(n + m log m)   [count + sort]
+SC: O(m)             [frequency map + list]

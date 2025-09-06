@@ -1,0 +1,13 @@
+====================================================
+APPROACH 1: BRUTE FORCE (Exponential)
+====================================================
+Algorithm:
+1. Count frequencies of all numbers.
+2. Let m = number of unique numbers.
+3. For every subset of these m numbers (2^m possibilities):
+   - Compute how many elements would be removed if we delete that subset.
+   - If removed >= n/2, update answer with min size of subset.
+4. Return minimum set size.
+
+TC: O(m * 2^m)   [exponential]
+SC: O(m)         [for frequency map]
