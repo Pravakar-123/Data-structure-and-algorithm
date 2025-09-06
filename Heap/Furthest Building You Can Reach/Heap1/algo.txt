@@ -1,0 +1,72 @@
+Algorithm: Furthest Building You Can Reach (Optimized using Min-Heap)
+
+Input:
+    - heights[] : array of building heights
+    - bricks    : number of bricks available
+    - ladders   : number of ladders available
+
+Goal:
+    Find the furthest building index you can reach if bricks/ladders are used optimally.
+
+---
+
+Step 1: Initialize a min-heap (PriorityQueue in Java).
+        -> This heap stores all upward climbs (positive differences).
+
+Step 2: Traverse the buildings from i = 0 to n-2
+        - Calculate diff = heights[i+1] - heights[i]
+
+        Case A: If diff <= 0
+            -> No resources needed, move to next building.
+
+        Case B: If diff > 0
+            -> Push diff into the min-heap.
+
+            -> If minHeap.size() > ladders:
+                   -> This means we have more climbs than ladders available.
+                   -> So, we must pay for the smallest climb using bricks.
+                   -> Pop the smallest climb from the heap and subtract from bricks.
+
+            -> If bricks < 0 after this:
+                   -> We don't have enough bricks to cover the climb.
+                   -> Return current index i (cannot proceed further).
+
+Step 3: If we finish the loop without running out of resources,
+        return heights.length - 1 (we reached the last building).
+
+---
+
+Key Idea:
+    - Always assign ladders to the largest climbs.
+    - Always pay bricks for smaller climbs.
+    - The min-heap ensures that when we have more climbs than ladders,
+      we "convert" the smallest climbs to brick usage, leaving ladders
+      reserved for the biggest jumps.
+
+---
+
+Complexity:
+    Time  = O(n log n), because each climb may be inserted/removed from heap.
+    Space = O(n), for storing climbs in the heap.
+
+---
+
+Example Dry Run:
+Input: heights = [4,12,2,7,3,18,20,3,19], bricks = 10, ladders = 2
+
+    0->1: diff=8, heap=[8], size=1 <= ladders -> ok
+    1->2: diff=-10, skip
+    2->3: diff=5, heap=[5,8], size=2 <= ladders -> ok
+    3->4: diff=-4, skip
+    4->5: diff=15, heap=[5,8,15], size=3 > ladders
+           -> pop smallest=5, bricks=10-5=5
+    5->6: diff=2, heap=[2,8,15], size=3 > ladders
+           -> pop smallest=2, bricks=5-2=3
+    6->7: diff=-17, skip
+    7->8: diff=16, heap=[8,15,16], size=3 > ladders
+           -> pop smallest=8, bricks=3-8=-5 < 0
+           -> stop at i=7
+
+Answer: 7
+
+---

@@ -1,0 +1,73 @@
+Algorithm: Furthest Building You Can Reach (Two Priority Queues)
+
+Input:
+    - heights[] : array of building heights
+    - bricks    : number of bricks available
+    - ladders   : number of ladders available
+
+Goal:
+    Find the furthest building index reachable.
+
+---
+
+Step 1: Initialize two heaps
+        - bricksHeap (max-heap): climbs currently paid with bricks
+        - laddersHeap (min-heap): climbs currently assigned to ladders (for tracking)
+
+Step 2: Traverse buildings from i = 0 to n-2
+        - diff = heights[i+1] - heights[i]
+
+        Case A: diff <= 0
+            -> No resources needed, continue.
+
+        Case B: diff > 0
+            -> Use bricks first:
+                 bricks -= diff
+                 push diff into bricksHeap
+
+            -> If bricks < 0:
+                 - If ladders > 0:
+                       largest = poll from bricksHeap
+                       push into laddersHeap
+                       bricks += largest   (recover those bricks)
+                       ladders--
+                 - Else:
+                       return i   (cannot proceed further)
+
+Step 3: If loop completes, return n-1
+
+---
+
+Key Idea:
+    - Bricks are used first for every climb.
+    - If we overspend bricks, we retroactively replace the biggest climb with a ladder.
+    - Two heaps maintain a clear separation:
+          bricksHeap = climbs paid by bricks
+          laddersHeap = climbs covered by ladders
+
+---
+
+Complexity:
+    Time  = O(n log n)  (heap insertions/removals)
+    Space = O(n)        (heaps store climbs)
+
+---
+
+Example Dry Run:
+Input: heights = [4,12,2,7,3,18,20,3,19], bricks = 10, ladders = 2
+
+    0->1: diff=8, use bricks → bricks=2, bricksHeap=[8]
+    1->2: diff=-10, skip
+    2->3: diff=5, use bricks → bricks=-3, bricksHeap=[8,5]
+           bricks<0 → move 8 to laddersHeap, ladders=1, bricks=5
+    3->4: diff=-4, skip
+    4->5: diff=15, use bricks → bricks=-10, bricksHeap=[15,5]
+           bricks<0 → move 15 to laddersHeap, ladders=0, bricks=5
+    5->6: diff=2, use bricks → bricks=3, bricksHeap=[5,2]
+    6->7: diff=-17, skip
+    7->8: diff=16, use bricks → bricks=-13, bricksHeap=[16,2,5]
+           bricks<0 and ladders=0 → stop at i=7
+
+Answer: 7
+
+---
