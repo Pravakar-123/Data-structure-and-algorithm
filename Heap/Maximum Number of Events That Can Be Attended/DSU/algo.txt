@@ -1,0 +1,42 @@
+
+------------------------------------------
+Approach 2: DSU (Union-Find with Path Compression)
+------------------------------------------
+
+Algorithm:
+1. Sort events by endDay, if tie then startDay.
+2. Use DSU map (day -> next free day).
+3. For each event [s, e]:
+   - Find earliest free day >= s using find(s)
+   - If day <= e:
+       * Attend event on that day
+       * Mark parent[day] = day+1
+4. Return total count.
+
+Dry Run Example: [[1,2],[1,2],[3,3],[1,5],[1,5]]
+Sorted: [1,2], [1,2], [3,3], [1,5], [1,5]
+
+Step 1: Event [1,2] -> find(1) = 1 -> attend day 1
+        parent = {1->2}
+Step 2: Event [1,2] -> find(1)=2 -> attend day 2
+        parent = {1->2, 2->3}
+Step 3: Event [3,3] -> find(3)=3 -> attend day 3
+        parent = {1->2, 2->3, 3->4}
+Step 4: Event [1,5] -> find(1)=4 -> attend day 4
+        parent = {1->4, 2->4, 3->4, 4->5}
+Step 5: Event [1,5] -> find(1)=5 -> attend day 5
+        parent = {1->4, 2->4, 3->4, 4->5, 5->6}
+
+Answer = 5
+
+Time Complexity: O(n log n) for sorting + O(n α(n)) for DSU operations
+    α(n) ≈ constant (inverse Ackermann)
+    -> Practically O(n log n)
+Space Complexity: O(n) for DSU parent map
+
+
+------------------------------------------
+Summary:
+- HashSet: simple but slow when ranges are large
+- DSU: efficient and scalable
+------------------------------------------

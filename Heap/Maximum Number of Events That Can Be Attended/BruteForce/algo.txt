@@ -1,0 +1,30 @@
+------------------------------------------
+Approach 1: HashSet (Brute Force Greedy)
+------------------------------------------
+
+Algorithm:
+1. Sort events by endDay, if tie then startDay.
+2. Keep a HashSet to store booked days.
+3. For each event [s, e]:
+   - Iterate from s to e
+   - Pick the first free day from HashSet
+   - If found, attend event and mark day as booked
+4. Return total count.
+
+Dry Run Example: [[1,2],[1,2],[3,3],[1,5],[1,5]]
+Sorted: [1,2], [1,2], [3,3], [1,5], [1,5]
+
+Step 1: Event [1,2] -> choose day 1
+Step 2: Event [1,2] -> day 1 used, choose day 2
+Step 3: Event [3,3] -> choose day 3
+Step 4: Event [1,5] -> choose day 4
+Step 5: Event [1,5] -> choose day 5
+
+Answer = 5
+
+Time Complexity: O(n * R)
+    n = number of events
+    R = average range length (end - start)
+    -> Very slow if ranges are large
+Space Complexity: O(n) for HashSet
+
