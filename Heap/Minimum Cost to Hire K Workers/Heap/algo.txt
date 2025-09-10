@@ -1,0 +1,75 @@
+$ cat min_cost_to_hire_workers.algo
+
+------------------------------------------
+Algorithm: Minimum Cost to Hire K Workers
+------------------------------------------
+
+Input: quality[], wage[], integer k
+Output: minimum total cost
+
+Step 1: Build worker list
+    For i in [0..n-1]:
+        ratio = wage[i] / quality[i]
+        workers.append( (ratio, quality[i]) )
+
+Step 2: Sort workers by ratio ascending.
+
+Step 3: Initialize
+    maxHeap = empty max-heap  # store qualities
+    qualitySum = 0
+    result = +∞
+
+Step 4: Iterate workers one by one
+    For each (ratio, q) in workers:
+        Push q into maxHeap
+        qualitySum += q
+
+        If maxHeap.size() > k:
+            removed = maxHeap.pop()   # remove largest quality
+            qualitySum -= removed
+
+        If maxHeap.size() == k:
+            cost = ratio * qualitySum
+            result = min(result, cost)
+
+Step 5: Return result
+
+
+$ cat dryrun_example2.txt
+
+Example: quality = [3,1,10,10,1], wage = [4,8,2,2,7], k = 3
+
+Step 1: Compute ratios
+    Worker0: 4/3 = 1.33
+    Worker1: 8/1 = 8.0
+    Worker2: 2/10 = 0.2
+    Worker3: 2/10 = 0.2
+    Worker4: 7/1 = 7.0
+
+Step 2: Sort workers by ratio
+    [(0.2,10), (0.2,10), (1.33,3), (7.0,1), (8.0,1)]
+
+Step 3 & 4: Iterate
+    Add (0.2,10): heap=[10], sum=10
+    Add (0.2,10): heap=[10,10], sum=20
+    Add (1.33,3): heap=[10,10,3], sum=23
+        size==k -> cost = 1.33*23 = 30.67 -> result=30.67
+    Add (7.0,1): heap=[10,10,3,1], sum=24 -> pop 10 -> sum=14
+        size==k -> cost = 7*14 = 98 -> result=30.67
+    Add (8.0,1): heap=[10,3,1,1], sum=15 -> pop 10 -> sum=5
+        size==k -> cost = 8*5 = 40 -> result=30.67
+
+Answer = 30.67
+
+
+$ cat complexity.txt
+
+Time Complexity:
+    - Sorting workers: O(n log n)
+    - Heap operations: O(n log k)
+    => Total = O(n log n)
+
+Space Complexity:
+    - Workers array: O(n)
+    - Heap: O(k)
+    => Total = O(n + k)

@@ -1,0 +1,32 @@
+Algorithm: canSplitIntoSubsequences(nums)
+
+Input: nums (sorted array)
+Output: true if possible, else false
+
+Steps:
+1. Create HashMap<Integer, PriorityQueue<Integer>> map
+      // key = last number of subsequence
+      // value = min-heap storing subsequence lengths
+
+2. For each num in nums:
+      a) If map contains num-1:
+            - Get the shortest subsequence ending at (num-1) → poll from map[num-1]
+            - Extend it by adding num (length+1)
+            - Push (length+1) into map[num]
+      b) Else:
+            - Start new subsequence of length 1
+            - Push 1 into map[num]
+
+3. After processing all nums:
+      For each heap in map:
+            For each length in heap:
+                 If length < 3 → return false
+
+4. Return true
+
+Time Complexity: O(n log n)
+   - Each number is inserted/removed from a heap once
+   - Heap operations are O(log k), total O(n log n)
+
+Space Complexity: O(n)
+   - Map + heaps store subsequences

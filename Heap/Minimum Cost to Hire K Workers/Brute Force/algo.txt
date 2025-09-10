@@ -1,0 +1,66 @@
+$ cat brute_force_algo.txt
+
+------------------------------------------
+Algorithm: Minimum Cost to Hire K Workers
+Approach: Brute Force (Generate All Combinations)
+------------------------------------------
+
+Input:
+    - quality[] : array of worker qualities
+    - wage[]    : array of minimum wages
+    - k         : number of workers to hire
+
+Output:
+    - minimum total cost to hire k workers
+
+Steps:
+
+1. Initialize minCost = +∞
+
+2. Generate all possible combinations of k workers
+      - Use recursive backtracking to build each combination
+      - Store each valid combination of indices
+
+3. For each combination:
+      - Initialize ratio = 0, totalQuality = 0
+      - For each worker in combination:
+            ratio = max(ratio, wage[i] / quality[i])
+            totalQuality += quality[i]
+      - Compute cost = ratio * totalQuality
+      - Update minCost = min(minCost, cost)
+
+4. Return minCost
+
+$ cat brute_force_dryrun.txt
+
+Example:
+    quality = [3,1,10,10,1]
+    wage    = [4,8,2,2,7]
+    k = 3
+
+Step 1: Generate all C(5,3) = 10 combinations
+
+    [0,1,2], [0,1,3], [0,1,4], [0,2,3], [0,2,4],
+    [0,3,4], [1,2,3], [1,2,4], [1,3,4], [2,3,4]
+
+Step 2: Evaluate each
+    Example combo [0,2,3]:
+        ratio = max(4/3, 2/10, 2/10) = 1.333
+        totalQuality = 3+10+10 = 23
+        cost = 1.333 * 23 = 30.67
+    Other combos give higher costs
+
+Answer = 30.67
+
+$ cat brute_force_complexity.txt
+
+Time Complexity:
+    - Generate all C(n,k) combinations: O(C(n,k))
+    - For each combination, compute cost in O(k)
+    => Total = O(C(n,k) * k)
+    (Exponential growth, not feasible for large n)
+
+Space Complexity:
+    - Storing combinations: O(C(n,k) * k)
+    - Recursion stack: O(k)
+    => Total = O(C(n,k) * k)

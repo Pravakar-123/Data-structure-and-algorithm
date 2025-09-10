@@ -1,1 +1,36 @@
-Need to check
+Algorithm: MaxEvents(events)
+
+Input: events[ ][ ] → list of events with [startDay, endDay]
+Output: Maximum number of events that can be attended
+
+Steps:
+1. Sort events by startDay.
+2. Initialize:
+      minHeap = empty min-heap (stores endDays)
+      attended = 0
+      day = 0
+      i = 0   (index for events)
+3. While i < n OR minHeap not empty:
+      a) If minHeap is empty:
+             day = events[i][0]   // jump to next event’s start
+      b) While i < n AND events[i][0] == day:
+             push events[i][1] into minHeap
+             i++
+      c) While minHeap not empty AND minHeap.top < day:
+             pop from minHeap   // remove expired events
+      d) If minHeap not empty:
+             pop one event (with smallest endDay)
+             attended = attended + 1
+             day = day + 1
+4. Return attended
+
+
+Time Complexity: 
+   - Sorting events → O(n log n)
+   - Heap operations (push + pop for each event) → O(n log n)
+   - Total → O(n log n)
+
+Space Complexity:
+   - Heap stores at most n events → O(n)
+   - Sorting overhead → O(1) to O(log n)
+   - Total → O(n)
