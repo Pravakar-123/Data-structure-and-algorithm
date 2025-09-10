@@ -1,6 +1,5 @@
 import java.util.*;
-
-class Code {
+class Solution{
     public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
         int n = quality.length;
         double[][] workers = new double[n][2]; // [ratio, quality]
@@ -24,12 +23,10 @@ class Code {
             qualitySum += q;
             maxHeap.offer(q);
 
-            if (maxHeap.size() > k) {
-                qualitySum -= maxHeap.poll(); // remove largest quality
-            }
 
             if (maxHeap.size() == k) {
                 res = Math.min(res, w[0] * qualitySum);
+                qualitySum -= maxHeap.poll();
             }
         }
 
