@@ -1,0 +1,78 @@
+PROBLEM:
+--------
+We are given courses as [duration, lastDay].
+Each course must finish before its lastDay.
+Find the maximum number of courses we can take.
+
+---------------------------------------------------
+ALGORITHM (Greedy + Max Heap):
+---------------------------------------------------
+1. Sort courses by lastDay (earliest deadline first).
+2. Initialize:
+      currentTime = 0
+      maxHeap = empty (store durations, longest on top)
+3. For each course [duration, lastDay]:
+      if currentTime + duration <= lastDay:
+           -> take course
+           -> currentTime += duration
+           -> push duration into maxHeap
+      else if maxHeap not empty AND maxHeap.top > duration:
+           -> replace the longest course with this one
+           -> currentTime += duration - maxHeap.pop()
+           -> push duration into maxHeap
+4. Answer = size of maxHeap
+
+---------------------------------------------------
+INTUITION:
+---------------------------------------------------
+-If we always try to take courses as early as possible (by deadline),
+-we never miss an opportunity to include a valid course.
+-If we encounter a course that doesn’t fit:
+-Instead of skipping blindly, we ask:
+-“Can I swap this with one of my already chosen courses?”
+-If yes, swapping out the longest one saves the most time,
+    allowing more shorter courses to fit.
+-The max heap helps us quickly find & remove the longest taken course.
+-This is essentially "schedule as late as possible, and drop the worst when needed".
+
+---------------------------------------------------
+TIME & SPACE COMPLEXITY:
+---------------------------------------------------
+- Sorting: O(n log n)
+- Heap operations: O(n log n) total (push/pop per course)
+- Time Complexity: O(n log n)
+- Space Complexity: O(n) for the heap
+
+---------------------------------------------------
+DRY RUN EXAMPLE:
+---------------------------------------------------
+Input: [[100,200],[200,1300],[1000,1250],[2000,3200]]
+
+Step 1: Sort by deadline
+       [[100,200],[1000,1250],[200,1300],[2000,3200]]
+
+Step 2: Process one by one
+   currentTime = 0, heap = []
+
+   - Take [100,200]:
+       currentTime = 100
+       heap = [100]
+
+   - Take [1000,1250]:
+       currentTime = 1100
+       heap = [1000,100]
+
+   - Take [200,1300]:
+       currentTime = 1300
+       heap = [1000,100,200]
+
+   - Try [2000,3200]:
+       currentTime + 2000 = 3300 > 3200 (not possible)
+       -> skip
+
+Step 3: Result = heap.size() = 3
+
+---------------------------------------------------
+FINAL ANSWER:
+---------------------------------------------------
+Maximum number of courses = 3
