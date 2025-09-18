@@ -1,0 +1,86 @@
+========================================
+   ELIMINATION GAME (Last Remaining)
+========================================
+
+Problem:
+    Start with numbers 1...n.
+    Repeatedly remove every other number, 
+    alternating direction (left → right, then right → left).
+    Return the last number remaining.
+
+----------------------------------------
+Intuition:
+----------------------------------------
+    - Maintain 'head' = first remaining number.
+    - Maintain 'step' = distance between remaining numbers.
+    - Maintain 'left' = direction of elimination.
+    - Each round:
+        • If moving from LEFT or if n is ODD:
+              head = head + step
+        • step doubles (gap widens).
+        • n halves (half numbers remain).
+        • Direction toggles.
+
+----------------------------------------
+Algorithm (pseudo-terminal flow):
+----------------------------------------
+function lastRemaining(n):
+    head = 1
+    step = 1
+    left = true
+
+    while n > 1:
+        if left == true OR n is odd:
+            head = head + step
+
+        step = step * 2
+        n = n / 2
+        left = NOT left
+
+    return head
+
+----------------------------------------
+Example Run: n = 9
+----------------------------------------
+
+Initial: 
+    n=9, head=1, step=1, left=true
+
+Round 1:
+    Direction = LEFT
+    Condition true → head = 1+1=2
+    step=2, n=4, left=false
+
+Round 2:
+    Direction = RIGHT
+    n=4 (even) → head stays=2
+    step=4, n=2, left=true
+
+Round 3:
+    Direction = LEFT
+    Condition true → head = 2+4=6
+    step=8, n=1, left=false
+
+End:
+    n=1 → return head=6
+
+----------------------------------------
+Visualization of Elimination:
+----------------------------------------
+Start:         [1, 2, 3, 4, 5, 6, 7, 8, 9]
+Left→Right →   [2, 4, 6, 8]
+Right→Left →   [2, 6]
+Left→Right →   [6]
+
+Final Answer = 6
+
+----------------------------------------
+Complexity Analysis:
+----------------------------------------
+    • Each round halves n → total rounds ≈ log₂(n)
+    • Operations per round = O(1)
+
+    Time Complexity  : O(log n)
+    Space Complexity : O(1)
+
+========================================
