@@ -1,0 +1,77 @@
+--------------------------------------------
+Problem: Decode Encoded Strings
+--------------------------------------------
+
+Example:
+    Input:  "3[a2[c]]"
+    Output: "accaccacc"
+
+    Input:  "ab3[a2[c]]2[cd]ef"
+    Output: "abaccaccacccdcdcef"
+
+--------------------------------------------
+Intuition
+--------------------------------------------
+1. The string is encoded using a pattern:
+      <number>[<substring>]
+   - Example: "3[a]" → "aaa"
+
+2. Nested encodings are possible:
+      "3[a2[c]]"
+   - First decode "a2[c]" → "acc"
+   - Then repeat it 3 times → "accaccacc"
+
+3. We must:
+   - Read characters one by one
+   - Collect plain letters directly
+   - Collect digits to form the repeat count
+   - When we see '[', find the matching ']' 
+     → recursively decode inside
+   - Append the decoded substring repeated "count" times
+
+4. Two approaches:
+   - Recursive (natural, matches nesting)
+   - Stack-based iterative (simulate recursion)
+
+--------------------------------------------
+Algorithm (Recursive, Independent Conditions)
+--------------------------------------------
+1. Define helper(s, l, r):
+   - Input: string s, range [l, r]
+   - Output: decoded substring
+
+2. Initialize:
+   - result = ""
+   - i = l
+
+3. While i <= r:
+   - If s[i] is a letter:
+       → append to result
+       → i++
+   - If s[i] is a digit:
+       → build the full number (num)
+       → skip '['
+       → find the matching ']'
+       → decode substring inside brackets (recursive call)
+       → repeat decoded substring num times
+       → append to result
+   - If s[i] is anything else (like closing bracket):
+       → just move i++
+
+4. Return result
+
+--------------------------------------------
+Time & Space Complexity
+--------------------------------------------
+- Let n = length of string
+
+Time:
+   - Each character is processed once
+   - Finding matching ']' costs O(n), but across recursion it's amortized
+   - Overall: O(n)
+
+Space:
+   - Recursion stack (nested brackets) → O(n) worst case
+   - Result string can be large → O(output size)
+
+--------------------------------------------
