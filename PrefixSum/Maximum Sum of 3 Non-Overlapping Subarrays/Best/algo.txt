@@ -1,0 +1,12 @@
+Explanation
+
+Step 1: Compute all possible sums of size k using a sliding window.
+
+Step 2: For each index, record the index of the maximum sum subarray from the left side.
+
+Step 3: Similarly, for each index, record the index of the maximum sum subarray from the right side.
+
+Step 4: Iterate over possible middle subarrays, combining left + middle + right, and choose the combination that gives the maximum total sum.
+
+✅ Time Complexity: O(n)
+✅ Space Complexity: O(n)
